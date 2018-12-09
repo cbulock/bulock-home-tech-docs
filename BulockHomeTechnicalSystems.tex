@@ -61,7 +61,6 @@
 \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
 \fi
 
-
 \usepackage[table]{xcolor}
 \definecolor{lightgray}{gray}{0.9}
 \definecolor{midgray}{RGB}{102,102,102}
@@ -82,10 +81,10 @@
 \def\fps@figure{htbp}
 \makeatother
 
-
-\date{}
-
 \usepackage[sfdefault,light]{merriweather}
+
+\date{2018-12-09}
+\author{Cameron Bulock}
 
 %%%%%%%%%%%%  HEADER  %%%%%%%%%%%%%%
 \renewcommand{\headrulewidth}{0pt}
@@ -93,10 +92,9 @@
 \rhead{}
 
 %%%%%%%%%%%%  FOOTER  %%%%%%%%%%%%%%
-
 \renewcommand{\footrulewidth}{1pt}
 \lfoot{Bulock Home Technical Systems}
-\cfoot{Revision 1d ~ 2017-12-07}
+\cfoot{Revision 2 ~ \thedate}
 \rfoot{\thepage}
 
 \begin{document}
@@ -186,7 +184,7 @@
 \item
   {Living Room}
 \item
-  {Unused}
+  {Backyard WAP}
 \item
   {Unused}
 \item
@@ -259,6 +257,17 @@
 \textbf{AP IP: }
 {10.0.10.0}
 
+\paragraph{\texorpdfstring{{Backyard}}{Backyard}}
+
+\textbf{Hardware: }
+{UniFi AP-AC-Mesh}
+
+\textbf{AP MAC: }
+\texttt{78:8a:20:b3:74:1c}
+
+\textbf{AP IP: }
+{10.0.0.13}
+
 %%%%%%%%%%%%  Network Services %%%%%%%%%%%%%%
 
 \newpage
@@ -268,16 +277,38 @@
 
 \subsection{\texorpdfstring{{DNS}}{DNS}}
 
+\subsubsection{\texorpdfstring{{Primary}}{Primary}}
+
 \textbf{Device: }
-{Ubiquiti EdgeRouter X SFP}
+{HA Docker}
+
+\textbf{Container: }
+{dnsmasq}
 
 \textbf{IP Address: }
-{10.0.0.1}
+{10.10.10.10}
+
+\textbf{VLAN: }
+{53}
+
+\subsubsection{\texorpdfstring{{Secondary}}{Secondary}}
+
+\textbf{Device: }
+{Basement Docker}
+
+\textbf{Container: }
+{dnsmasq}
+
+\textbf{IP Address: }
+{10.10.10.11}
+
+\textbf{VLAN: }
+{53}
 
 \subsection{\texorpdfstring{{DHCP}}{DHCP}}
 
 \textbf{Device: }
-{Ubiquiti EdgeRouter X SFP}
+{UniFi Security Gateway}
 
 \textbf{IP Address: }
 {10.0.0.1}
@@ -285,10 +316,13 @@
 \subsection{\texorpdfstring{{Reverse Proxy}}{Reverse Proxy}}
 
 \textbf{Device: }
-{Raspberry Pi 2 App Server}
+{HA Docker}
+
+\textbf{Container: }
+{proxy}
 
 \textbf{IP Address: }
-{10.0.0.20}
+{10.0.0.50}
 
 \textbf{Platform: }
 {Nginx}
@@ -296,10 +330,13 @@
 \subsection{\texorpdfstring{{Plex Media Server}}{Plex Media Server}}
 
 \textbf{Device: }
-{QNAP TS-453A NAS}
+{Basement Docker}
+
+\textbf{Container: }
+{plex}
 
 \textbf{IP Address: }
-{10.0.0.25}
+{10.0.0.51}
 
  %%%%%%%%%%%%  Databases / Data %%%%%%%%%%%%%%
 
@@ -318,19 +355,25 @@
 
 \subsection{\texorpdfstring{{InfluxDB}}{InfluxDB}}
 
-\textbf{Device :}
-{Raspberry Pi 2 App Server}
+\textbf{Device: }
+{HA Docker}
+
+\textbf{Container: }
+{influxdb}
 
 \textbf{IP Address: }
-{10.0.0.20}
+{10.0.0.50}
 
 \subsection{\texorpdfstring{{Grafana}}{Grafana}}
 
 \textbf{Device: }
-{Raspberry Pi 2 App Server}
+{HA Docker}
+
+\textbf{Container: }
+{grafana}
 
 \textbf{IP Address: }
-{10.0.0.20}
+{10.0.0.50}
 
 \textbf{Web Interface: }
 {\href{https://www.google.com/url?q=https://data.bulock.house\&sa=D\&ust=1544293199854000}{https://data.bulock.house}}
@@ -352,31 +395,37 @@
 \textbf{File Path: }
 \texttt{/share/ServerBackups/}
 
-\subsection{\texorpdfstring{{Current Backups}}{Current Backups}}
-
-\subsubsection{\texorpdfstring{{Home Assistant}}{Home Assistant}}
+\subsection{\texorpdfstring{{HA Docker}}{HA Docker}}
 
 \textbf{Server: }
-{ha.bulock}
+{ha.docker}
 
 \textbf{File Path on NAS: }
-\texttt{/share/ServerBackups/ha/.homeassistant}
+\texttt{/share/ServerBackups/nuc/opt}
 
-\subsubsection{\texorpdfstring{{Nginx}}{Nginx}}
+\subsection{\texorpdfstring{{Basement Docker}}{Basement Docker}}
 
 \textbf{Server: }
-{app.bulock}
+{basement.docker}
 
 \textbf{File Path on NAS: }
-\texttt{/share/ServerBackups/app/nginx/}
+\texttt{/share/ServerBackups/basement.docker/opt}
 
-\subsubsection{\texorpdfstring{{Nagios}}{Nagios}}
+\subsection{\texorpdfstring{{Nagios}}{Nagios}}
 
 \textbf{Server: }
 {nagios.bulock}
 
 \textbf{File Path on NAS: }
 \texttt{/share/ServerBackups/nagios/}
+
+\subsection{\texorpdfstring{{Living Room Pi}}{Living Room Pi}}
+
+\textbf{Server: }
+{10.0.0.93}
+
+\textbf{File Path on NAS: }
+\texttt{/share/ServerBackups/plant/}
 
 %%%%%%%%%%%%  App Server %%%%%%%%%%%%%%
 
@@ -391,20 +440,13 @@
 \textbf{IP Address: }
 {10.0.0.20}
 
+{This server is planning to be retired}
+
 \subsection{\texorpdfstring{{Running Applications}}{Running Applications}}
 
 \begin{itemize}
-\tightlist
 \item
-  {Nginx (Reverse web proxy server)}
-\item
-  {Grafana (Time based data graphing server)}
-\item
-  {InfluxDb (Time based database)}
-\item
-  {Mosquitto (MQTT server)}
-\item
-  {Jackett (Torrent search proxy)}
+  {mqtt-dasher (Amazon Dash buttons to MQTT)}
 \end{itemize}
 
 
@@ -505,7 +547,7 @@
 {Lenovo Laptop} & \texttt{7c:e9:d3:17:51:3b} & {} & {laptop} & {10.0.0.92} \\
 {Laundry Tablet} & \texttt{10:bf:48:ea:8d:95} & {} & {laundry.tablet} & {10.0.0.91} \\
 {HA Dev Server} & \texttt{40:a5:ef:0c:a1:25} & {} & {hadev} & {10.0.0.90} \\
-{NUC} & \texttt{94:c6:91:19:3e:09} & {} & {nuc} & {10.0.0.50} \\
+{HA Docker} & & {} \texttt{94:c6:91:19:3e:09} & {ha.docker} & {10.0.0.50} \\
 {Basement Docker (eth0)} & \texttt{68:94:23:5C:B1:EB} & {96:24:a1:9e:e3:f8} & {basement.docker} & {10.0.0.51} \\
 {App Server} & {} & \texttt{B8:27:EB:A1:94:A5} & {app} & {10.0.0.20} \\
 {Nagios} & {} & \texttt{b8:27:eb:b2:5b:f7} & {nagios} & {10.200.0.10} \\
@@ -521,16 +563,18 @@
 \vspace{\baselineskip}\section*{Automation Controllers}
 \addcontentsline{toc}{section}{Automation Controllers}
 
+\begin{multicols}{2}
+
 \subsection{\texorpdfstring{{Primary HA Server}}{Primary HA Server}}
 
 \textbf{Device: }
-{Raspberry Pi 3 HA Server}
+{NUC7-i3-BNK}
 
 \textbf{Z-Wave Controller: }
 {Aeotec Z-Stick Gen5}
 
 \textbf{IP Address: }
-{10.0.3.0}
+{10.0.0.50}
 
 \textbf{Server Application: }
 {Home Assistant}
@@ -541,23 +585,13 @@
 \textbf{Location: }
 {Media Cabinet - Living Room}
 
-\subsection{\texorpdfstring{{Wink}}{Wink}}
-
-\textbf{Device: }
-{Wink 1}
-
-\textbf{IP Address: }
-{10.0.3.1}
-
-\textbf{Location: }{Loft}
-
 \subsection{\texorpdfstring{{Osram Gateway}}{Osram Gateway}}
 
 \textbf{Device: }
 {Osram LIGHTIFY Gateway}
 
 \textbf{IP Address: }
-{10.0.3.2}
+{10.50.0.12}
 
 \textbf{Location: }
 {Loft}
@@ -568,10 +602,21 @@
 {Lutron Smart Bridge Pro 2}
 
 \textbf{IP Address: }
-{10.0.3.3}
+{10.50.0.13}
 
 \textbf{Location: }
 {Basement Rack}
+
+\subsection{\texorpdfstring{{Xiaomi Gateway}}{Xiaomi Gateway}}
+
+\textbf{Device: }
+{Xiaomi Gateway}
+
+\textbf{IP Address: }
+{10.50.0.14}
+
+\textbf{Location: }
+{Kitchen}
 
 %%%%%%%%%%%%  Automation Devices %%%%%%%%%%%%%%
 
@@ -673,6 +718,17 @@
 \paragraph{\texorpdfstring{{Christmas Tree}}{Christmas Tree}}
 
 \textbf{Device: }
+{Sonoff Wireless Switch}
+
+\textbf{Network: }
+{Wifi}
+
+\textbf{Hub: }
+{Primary HA Server (interfaces through MQTT)}
+
+\paragraph{\texorpdfstring{{Snowman Christmas Decoration}}{Snowman Christmas Decoration}}
+
+\textbf{Device: }
 {Leviton Smart Plug}
 
 \textbf{Network: }
@@ -703,6 +759,8 @@
 \textbf{Hub: }
 {Primary HA Server}
 
+\newpage
+
 \subsection{\texorpdfstring{{Motion Sensors}}{Motion Sensors}}
 
 \paragraph{\texorpdfstring{{Breakfast Bar}}{Breakfast Bar}}
@@ -714,9 +772,9 @@
 {Z-Wave}
 
 \textbf{Hub: }
-{Wink}
+{Primary HA Server}
 
-\paragraph{\texorpdfstring{{Downstairs Bathroom}}{Downstairs Bathroom}}
+\paragraph{\texorpdfstring{{Stairs}}{Stairs}}
 
 \textbf{Device: }
 {EcoLink Motion Sensor}
@@ -727,7 +785,20 @@
 \textbf{Hub: }
 {Primary HA Server}
 
-\paragraph{\texorpdfstring{{Door/Window Sensors}}{Door/Window Sensors}}
+\paragraph{\texorpdfstring{{Bathrooms}}{Bathrooms}}
+
+\textbf{Device: }
+{Xiaomi Aqara Human Body Sensor}
+
+\textbf{Network: }
+{Zigbee}
+
+\textbf{Hub: }
+{Xiaomi Gateway}
+
+\subsection{\texorpdfstring{{Door/Window Sensors}}{Door/Window Sensors}}
+
+\paragraph{\texorpdfstring{{Front/Back Doors, Basement Window}}{Front/Back Doors, Basement Window}}
 
 \textbf{Device: }
 {GoControl Door/Window Sensors}
@@ -736,7 +807,7 @@
 {Z-Wave}
 
 \textbf{Hub: }
-{Doors on Wink, Window on Primary HA Server}
+{Primary HA Server}
 
 \paragraph{\texorpdfstring{{Washing Machine Door}}{Washing Machine Door}}
 
@@ -748,6 +819,17 @@
 
 \textbf{Hub: }
 {Primary HA Server}
+
+\paragraph{\texorpdfstring{{Bathrooms}}{Bathrooms}}
+
+\textbf{Device: }
+{Xiaomi Aqara Smart Window Door Sensor}
+
+\textbf{Network: }
+{Zigbee}
+
+\textbf{Hub: }
+{Xiaomi Gateway}
 
 \subsection{\texorpdfstring{{Security}}{Security}}
 
@@ -762,18 +844,42 @@
 \textbf{Hub: }
 {Primary HA Server}
 
-\paragraph{\texorpdfstring{{Siren}}{Siren}}
+\subsection{\texorpdfstring{{Climate}}{Climate}}
+
+\paragraph{\texorpdfstring{{Thermostat / Humidistat}}{Thermostat / Humidistat}}
 
 \textbf{Device: }
-{GoControl Wireless Siren \& Strobe}
+{Ecobee3}
 
 \textbf{Network: }
-{Z-Wave}
+{Wifi}
 
 \textbf{Hub: }
-{Wink}
+{Primary HA Server}
+
+\paragraph{\texorpdfstring{{Bathroom Sensors}}{Bathroom Sensors}}
+
+\textbf{Device: }
+{Xiaomi Aqara Temperature Humidity Sensor}
+
+\textbf{Network: }
+{Zigbee}
+
+\textbf{Hub: }
+{Xiaomi Gateway}
 
 \subsection{\texorpdfstring{{Misc}}{Misc}}
+
+\paragraph{\texorpdfstring{{Plants}}{Plants}}
+
+\textbf{Device: }
+{Xiaomi Mi Flora Monitor}
+
+\textbf{Network: }
+{Bluetooth LE}
+
+\textbf{Hub: }
+{Living Room Pi (communicated to Primary HA Server over MQTT)}
 
 \paragraph{\texorpdfstring{{Power Monitoring}}{Power Monitoring}}
 
@@ -786,7 +892,7 @@
 \textbf{Hub: }
 {Primary HA Server}
 
-\paragraph{\texorpdfstring{{Water Levels}}{Water Levels}}
+\paragraph{\texorpdfstring{{Christmas Tree Water Levels}}{Christmas Tree Water Levels}}
 
 \textbf{Device: }
 {Aeotec Water Sensor}
@@ -796,5 +902,6 @@
 
 \textbf{Hub: }
 {Primary HA Server}
+\end{multicols}
 
 \end{document}
